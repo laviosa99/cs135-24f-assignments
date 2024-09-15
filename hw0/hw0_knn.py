@@ -2,13 +2,13 @@
 K Nearest Neighbors
 
 >>> data_NF = np.asarray([
-...     [1., 0.],
-...     [0., 1.],
-...     [-1., 0.],
-...     [0., -1.]])
+...     [1, 0],
+...     [0, 1],
+...     [-1, 0],
+...     [0, -1]])
 >>> query_QF = np.asarray([
-...     [0.9, 0.],
-...     [0., -0.9]])
+...     [0.9, 0],
+...     [0, -0.9]])
 
 Example Test K=1
 ----------------
@@ -67,4 +67,22 @@ def calc_k_nearest_neighbors(data_NF, query_QF, K=1):
     '''
 
     # TODO fixme
-    return None
+
+    # Initialize neighb_QKF with zeros, 3D array    
+    neighb_QKF = np.zeros(shape=(query_QF.shape[0], K, query_QF.shape[1]))
+
+    for i, query in enumerate(query_QF): 
+    # Compute distances from the query vector to all data points
+        dist = np.linalg.norm(data_NF - query, axis=1)
+        # print(dist)
+
+        # Grabbing indices of the K smallest distances
+        nearest = np.argsort(dist)[:K]
+        # print(nearest)
+
+        # Populate the result array with the nearest neighbors
+        neighb_QKF[i] = data_NF[nearest]
+        # print(neighb_QKF)
+        
+    return neighb_QKF
+

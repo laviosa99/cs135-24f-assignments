@@ -8,7 +8,7 @@ Complete the problem below to demonstrate your comprehension of NumPy.
 You can do a basic check of the doctests via:
 $ python -m doctest hw0_split.py
 
-Examples
+Examplespython -m doctest hw0_split.py
 --------
 >>> x_LF = np.asarray([
 ... [0, 11],
@@ -97,6 +97,27 @@ def split_into_train_and_test(x_all_LF, frac_test=0.5, random_state=None):
     # TODO use the first M row ids in shuffled_ids_L to make x_train_MF
     # TODO use the remaining N row ids to make x_test_NF
     # HINT Use integer indexing
+    
+    # Copy the first M row ids from shuffled_ids_L to make x_train_MF
+    train_row_ids = shuffled_ids_L[0:M]
+
+    # print training rows into x_train_MF
+    x_train_MF = []
+
+    for i in train_row_ids: 
+        train = x_all_LF[i]
+        x_train_MF.append(train)
+  
+    # Copy the remaining N row ids to make x_test_NF
+    test_row_ids = shuffled_ids_L[-N:]
+
+    # print testing rows into x_test_NF
+    x_test_NF = []
+
+    for i in test_row_ids: 
+        test = x_all_LF[i]
+        x_test_NF.append(test)
 
     # TODO return both x_train_MF and x_test_NF
-    return None, None
+    
+    return np.stack(x_train_MF), np.stack(x_test_NF)
