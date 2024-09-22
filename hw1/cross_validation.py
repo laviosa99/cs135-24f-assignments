@@ -60,9 +60,24 @@ def train_models_and_calc_scores_for_n_fold_cv(
 
     # TODO define the folds here by calling your function
     # e.g. ... = make_train_and_test_row_ids_for_n_fold_cv(...)
+    train_ids_per_fold, test_ids_per_fold = make_train_and_test_row_ids_for_n_fold_cv(n_examples=x_NF.shape[0], n_folds=n_folds, random_state=random_state)
 
     # TODO loop over folds and compute the train and test error
     # for the provided estimator
+    for fold in range(n_folds):
+        train_ids = train_ids_per_fold[fold]
+        test_ids = test_ids_per_fold[fold]
+
+        # Create and fit the linear regressor
+        estimator.fit(x_NF[train_ids], y_N[train_ids])
+
+        # compute training error
+        train_predict = estimator.predict(x_NF[train_ids])
+        train_error_per_fold[fold] = calc_root_mean_squared_error(y_N[train_ids], train_predict)
+
+        # compute testing error
+        test_predict = estimator.predict(x_NF[test_ids])
+        test_error_per_fold[fold] = calc_root_mean_squared_error(y_N[test_ids], test_predict)
 
     return train_error_per_fold, test_error_per_fold
 
@@ -137,10 +152,30 @@ def make_train_and_test_row_ids_for_n_fold_cv(
 
     # TODO obtain a shuffled order of the n_examples
 
+    tot_ids = np.arange(n_examples)
+    random_state.shuffle(tot_ids)
+
+    # compute size of folds
+    fold_sizes = np.full(n_folds, n_examples // n_folds)
+    fold_sizes[:n_examples % n_folds] += 1 # take care of the remainder by distributing it evenly among the first folds
+
     train_ids_per_fold = list()
     test_ids_per_fold = list()
     
     # TODO establish the row ids that belong to each fold's
     # train subset and test subset
+
+    current = 0
+    for fold_size in fold_sizes:
+        test_ids = tot_ids[current:current + fold_size]
+        train_ids = np.concatenate((tot_ids[:current], tot_ids[current + fold_size:]))
+        
+        test_ids_per_fold.append(test_ids)
+        train_ids_per_fold.append(train_ids)
+        
+        current += fold_size
+
+
+
 
     return train_ids_per_fold, test_ids_per_fold
