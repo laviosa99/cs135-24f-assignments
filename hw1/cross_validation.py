@@ -11,7 +11,7 @@ def train_models_and_calc_scores_for_n_fold_cv(
     ----
     estimator : any regressor object with sklearn-like API
         Supports 'fit' and 'predict' methods.
-    x_NF : 2D numpy array, shape (n_examples, n_features) = (N, F)
+    x_NF : 2D numpy array, shaFit a linear regression model to a polynomial feature transformation of the provided training set at each of these possible degrees: [1, 2, 3, 4, 5, 6, 7]. pe (n_examples, n_features) = (N, F)
         Input measurements ("features") for all examples of interest.
         Each row is a feature vector for one example.
     y_N : 1D numpy array, shape (n_examples,)
