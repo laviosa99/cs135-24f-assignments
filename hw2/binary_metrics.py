@@ -62,7 +62,27 @@ def calc_TP_TN_FP_FN(ytrue_N, yhat_N):
     TN = 0
     FP = 0
     FN = 0
-    return None  # TODO fix me
+    count = 0
+    for value in ytrue_N: 
+        if value == yhat_N[count]:
+            if value == 0: 
+                TN += 1
+            elif value == 1: 
+                TP += 1
+        else: 
+            if yhat_N[count] == 0: 
+                FN += 1
+            elif yhat_N[count] == 1: 
+                FP += 1
+        count += 1
+    return TP, TN, FP, FN  # TODO fix me
+
+# N = 8
+# ytrue_N = np.asarray([0., 0., 0., 0., 1., 1., 1., 1.])
+# yhat_N  = np.asarray([0., 0., 1., 0., 1., 1., 0., 0.])
+# TP, TN, FP, FN = calc_TP_TN_FP_FN(ytrue_N, yhat_N)
+# print(TP, TN, FP, FN)
+# np.allclose(TP + TN + FP + FN, N)
 
 
 def calc_ACC(ytrue_N, yhat_N):
@@ -98,7 +118,16 @@ def calc_ACC(ytrue_N, yhat_N):
     # You should *use* your calc_TP_TN_FP_FN function from above
     # Hint: make sure denominator will never be exactly zero
     # by adding a small value like 1e-10
-    return None  # TODO fix me
+    TP, TN, FP, FN = calc_TP_TN_FP_FN(ytrue_N, yhat_N)
+    smol = 1e-10
+    acc = (TP + TN) / (TP + TN + FP + FN +smol)
+
+    return acc  # TODO fix me
+# N = 8
+# ytrue_N = np.asarray([0., 0., 0., 0., 1., 1., 1., 1.])
+# yhat_N  = np.asarray([0., 0., 1., 0., 1., 1., 0., 0.])
+# acc = calc_ACC(ytrue_N, yhat_N)
+# print("%.3f" % acc)
 
 
 
@@ -142,8 +171,22 @@ def calc_TPR(ytrue_N, yhat_N):
     # You should *use* your calc_TP_TN_FP_FN function from above
     # Hint: make sure denominator will never be exactly zero
     # by adding a small value like 1e-10
-    return None  # TODO fix me
 
+    if ytrue_N == []:
+        TP, TN, FP, FN = 0, 0, 0, 0
+    else: 
+        TP, TN, FP, FN = calc_TP_TN_FP_FN(ytrue_N, yhat_N)
+    
+    smol = 1e-10
+    tpr = (TP) / (TP + FN + smol)
+    return tpr  # TODO fix me
+# N = 8
+# ytrue_N = np.asarray([0., 0., 0., 0., 1., 1., 1., 1.])
+# yhat_N  = np.asarray([0., 0., 1., 0., 1., 1., 0., 0.])
+# tpr = calc_TPR(ytrue_N, yhat_N)
+# print("%.3f" % tpr)
+# empty_val = calc_TPR([], [])
+# print("%.3f" % empty_val)
 
 def calc_PPV(ytrue_N, yhat_N):
     ''' Compute positive predictive value of provided predicted binary values.
@@ -185,5 +228,12 @@ def calc_PPV(ytrue_N, yhat_N):
     # You should *use* your calc_TP_TN_FP_FN function from above
     # Hint: make sure denominator will never be exactly zero
     # by adding a small value like 1e-10
-    return None  # TODO fix me
+    if ytrue_N == []:
+        TP, TN, FP, FN = 0, 0, 0, 0
+    else: 
+        TP, TN, FP, FN = calc_TP_TN_FP_FN(ytrue_N, yhat_N)
+
+    smol = 1e-10
+    ppv = (TP) / (TP + FP + smol)
+    return ppv  # TODO fix me
 
